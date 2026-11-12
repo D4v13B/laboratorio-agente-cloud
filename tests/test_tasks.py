@@ -23,6 +23,12 @@ class TestTasks(unittest.TestCase):
     def test_agregar_tarea_categoria_vacia(self):
         tareas = []
         with self.assertRaises(ValueError):
+            agregar_tarea(tareas, "Leer documentación", "")
+        self.assertEqual(tareas, [])
+
+    def test_agregar_tarea_categoria_solo_espacios(self):
+        tareas = []
+        with self.assertRaises(ValueError):
             agregar_tarea(tareas, "Leer documentación", "   ")
         self.assertEqual(tareas, [])
 
@@ -34,6 +40,12 @@ class TestTasks(unittest.TestCase):
         completar_tarea(tareas, 3)
         resultado = pendientes(tareas, "ESTUDIO")
         self.assertEqual([t["id"] for t in resultado], [1])
+
+    def test_pendientes_categoria_inexistente(self):
+        tareas = []
+        agregar_tarea(tareas, "Leer documentación", "Estudio")
+        agregar_tarea(tareas, "Enviar informe", "Trabajo")
+        self.assertEqual(pendientes(tareas, "Ocio"), [])
 
     def test_pendientes_sin_categoria_devuelve_todas(self):
         tareas = []
